@@ -22,7 +22,9 @@ var rl = readline.createInterface({
 var what=require('what.js');
 
 
-var specific="";
+var cte="";
+var ct="";
+
 
 
 
@@ -65,9 +67,11 @@ function updateStatusT(i){
         }
         else
         {
-            var last={"w":noCurrentWeek,"history":{"l":"*","ht":0,"hs":5,"h":1,"p":4,"t":"Blue","te":"Blue"}};
-            itemCurrentWeek=last.history;
-            w.push(itemCurrentWeek);
+            var cActivity=iActivity(w);
+            if(cActivity)
+            {var last={"w":noCurrentWeek,"t":ct,"hp":cActivity.hp,"history":{"l":"w","tt":0,"ts":cts,"t":0,"p":cActivity.history.p,"te":cte}};
+                        itemCurrentWeek=last.history;
+                        w.push(itemCurrentWeek);}
         }
 
         itemCurrentWeek.h=itemCurrentWeek.h++;
@@ -78,6 +82,29 @@ function updateStatusT(i){
         
 
 }
+
+function iActivity(w)
+{
+    if(ct && cte)
+    {
+        var l=w.length;
+        while(l--)
+        {
+            if(w[l].tg==ct)
+            {
+                return w[l];
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
 
 
 function creaArchivo(objetom,nameFile)
@@ -342,7 +369,7 @@ function doIt()
                 {
                     if(w[l].w==noWeek)
                     {
-                        console.log("   ht: "w[l].history.ht+" hs: "w[l].history.ht)   
+                        console.log("   ht: "w[l].history.ht+" hs: "w[l].history.hs+"  h: "w[l].history.h)   
                     }
                 }
 
@@ -371,6 +398,17 @@ function doIt()
       rl.close();
       return;
       break
+      default:
+      if(answer)
+      {
+        var w=what.what;
+        var l=w.length;
+        while(l--)
+        {
+
+        }
+      }
+      break;
 
 }
   doIt();
