@@ -25,11 +25,33 @@ var what=require('what.js');
 var cTask="";
 var cActivity="";
 
+var iday
 
 
 
 
-
+function findIdices(activity)
+{
+    var a=what.what[cActivity].weeks;
+    var today=new Date();
+    var noWeekYear=weekNumberYear(today);
+    var weFoundIt;
+    var iday;
+    var iTask;
+    var iWeek=indexByProperty(a,"noWeek",noWeekYear);
+    var theTask;
+    if(indexWeek)
+    {
+        iday=indexByProperty(a[iWeek].days,"day",today.toLocaleDateString());
+        if(iday)
+        {
+            iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",cTask);
+            weFoundIt=true;
+            
+        }    
+    }
+    return {weFoundIt:weFoundIt,iWeek:iWeek,iday:iday,iTask:iTask};
+}
 
 
 
@@ -39,23 +61,31 @@ var cActivity="";
 
 function findIndicesTask(activity)
 {
-    var a=what.what[cActivity].weeks;
-    var today=new Date();
-    var noWeekYear=weekNumberYear(today);
-    var weFoundIt;
-    var iday;
-    var iTask;
-    var iWeek=indexByProperty(a,"noWeek",noWeekYear);
-    if(indexWeek)
+     var a=what.what[cActivity].weeks;
+    // var today=new Date();
+    // var noWeekYear=weekNumberYear(today);
+    // var weFoundIt;
+    // var iday;
+    // var iTask;
+    // var iWeek=indexByProperty(a,"noWeek",noWeekYear);
+    // var theTask;
+    // if(indexWeek)
+    // {
+    //     iday=indexByProperty(a[iWeek].days,"day",today.toLocaleDateString());
+    //     if(iday)
+    //     {
+    //         iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",cTask);
+    //         weFoundIt=true;
+    //         return a[iWeek].days[iday].tasks[lTask];
+    //     }    
+    // }
+    var i=findIdices(activity)
+    if(i && isDefined(i.iWeek) && isDefined(i.iday))
     {
-        iday=indexByProperty(a[iWeek].days,"day",today.toLocaleDateString());
-        if(iday)
-        {
-            iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",cTask);
-            weFoundIt=true;
-        }    
+        return a[i.iWeek].days[i.iday].tasks[i.iTask];
     }
-    return {weFoundIt:weFoundIt,iWeek:iWeek,iday:iday,iTask:iTask};
+
+    //return {weFoundIt:weFoundIt,iWeek:iWeek,iday:iday,iTask:iTask};
 }
 
 function indexByProperty(theArray,property,value)
@@ -84,70 +114,47 @@ function isDefined(thing)
 
 
 function addWeek(a)
+                    {
+                        dWeek=a.weeks[i.iWeek-1];//.days[0].tasks;
+                        dWeek.noWeek=weekNumberYear(new Date());
+                        var ld=dWeek.days.length;
+                        var today=new Date();
+                        while(ld--)
+                        {
+                            dWeek.days[ld].day=neeDayWeek(today,ld);
+                            var lt=dWeek.days[ld].tasks.length;
+                            while(lt)
+                            {
+                                dWeek[ld].tasks[lt].totalTomatl=0;
+                                dWeek[ld].tasks[lt].noTomatl=0;
+                            }
+                        }
+                        a.weeks.push(dWeek);
+                    }
+
+ function newDayWeek(f,days)
 {
-            dWeek=a.weeks[i.iWeek-1];//.days[0].tasks;
-            dWeek.noWeek=weekNumberYear(new Date());
-            var ld=dWeek.days.length;
-            while(ld--)
-            {
-                var lt=dWeek.days[ld].tasks.length;
-                while(lt)
-                {
-                    dWeek[ld].tasks[lt].totalTomatl=0;
-                    dWeek[ld].tasks[lt].noTomatl=0;
-                }
-            }
-            a.weeks.push({dWeek});
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result.toLocaleDateString();
 }
 
 
-function updateStatusT(){
+ function updateStatusT() {
 
-    creaArchivo(w,"bak.js")
+                        creaArchivo(w, "bak.js")
+                        var a = what.what[cActivity].weeks;
+                      
+                        var theTask = findIndicesTask(cActivity);
+                        if (!theTask)
+                        {
+                            addWeek(a);
+                            theTask = findIndicesTask(cActivity);
+                        }
+                        theTask.noTomatl++;
 
-    var a=what.what[cActivity].weeks;
-    var i=findIndicesTask(cActivity);
-    var theTask;
-    var w;
-
-    if(isDefined(i.iWeek))
-    {
-        w=a.weeks[i.iWeek];
-        if(isDefined(i.iday[i.iday]))
-        {
-            theTask=w.days[i.iday].tasks[i.i];
-            theTask
-        }
-    }
-    else
-    {
-        addWeek(a);        
-    }
-
-
-    // var week=findWeek(cActivity);
-
-
-    //     var itemCurrentWeek
-    //     if(indiceWeek>-1)
-    //     {
-    //         itemCurrentWeek=w[indiceWeek].history;
-    //     }
-    //     else
-    //     {
-    //         var cActivity=iActivity(w);
-    //         if(cActivity)
-    //         {var last={"w":noCurrentWeek,"t":cActivity,"hp":cActivity.hp,"history":{"l":"w","tt":0,"ts":cts,"t":0,"p":cActivity.history.p,"te":cTask}};
-    //                     itemCurrentWeek=last.history;
-    //                     w.push(itemCurrentWeek);}
-    //     }
-
-        itemCurrentWeek.h=itemCurrentWeek.h++;
-        itemCurrentWeek.ht=itemCurrentWeek.h++;
-
-        creaArchivo(w,"what.js");
-
-}
+                        creaArchivo(w, "what.js");
+                    }
 
 function iTomatls()
 {
@@ -308,6 +315,51 @@ function horas(msec)
     return "  "+horas+minutos+segundos;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function infoTomatl()
+{
+    var i=findIdices(cActivity)
+    var theTask;
+    var theWeek;
+    var theDay;
+     var a=what.what[cActivity].weeks;
+    if(i && isDefined(i.iWeek) && isDefined(i.iday))
+       {
+            theWeek=a[i.iWeek];
+            theDay=a[i.iWeek].days[i.iday];
+            theTask = a[i.iWeek].days[i.iday].tasks[i.iTask];
+       }
+    
+    var cWeek=weekNumberYear(new Date());
+   var today=new Date();
+                    var namesDays = ["su","m","tu","w","th","f","sa"];
+                    var cWeek = weekNumberYear(today);
+                    var cadena = "\n     w: " + cWeek;
+                    cadena += " d:" + namesDays[today.getDay()] + " " + theDay.day;
+                    cadena += " tsk:" + cActivity + " - " + cTask + " txw" + theTask.noTomatlWeek + "  nt:" + theTask.noTomatl;
+                    return cadena;
+}
+
+
+
 //1 500000
 var interval;
 var ultimaPausa=0;
@@ -391,7 +443,9 @@ function doIt()
                 running=running==0?now()-inicio:((now()-inicio)-pausa);
                 console.log('  +working: '+horas(running));
                 console.log(cadenaTomatl?cadenaTomatl+' -  n: '+daCounter:"");
+
                 console.log(whatIsDoing);
+                console.log(infoTomatl());
                 console.log("------------------------------------------------")
 
                 break;
