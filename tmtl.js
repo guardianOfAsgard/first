@@ -22,8 +22,8 @@ var rl = readline.createInterface({
 var what=require('what.js');
 
 
-var cte="";
-var ct="";
+var cTask="";
+var cActivity="";
 
 
 
@@ -37,60 +37,131 @@ var ct="";
 
 
 
+function findIndicesTask(activity)
+{
+    var a=what.what[cActivity].weeks;
+    var today=new Date();
+    var noWeekYear=weekNumberYear(today);
+    var weFoundIt;
+    var iday;
+    var iTask;
+    var iWeek=indexByProperty(a,"noWeek",noWeekYear);
+    if(indexWeek)
+    {
+        iday=indexByProperty(a[iWeek].days,"day",today.toLocaleDateString());
+        if(iday)
+        {
+            iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",cTask);
+            weFoundIt=true;
+        }    
+    }
+    return {weFoundIt:weFoundIt,iWeek:iWeek,iday:iday,iTask:iTask};
+}
+
+function indexByProperty(theArray,property,value)
+{
+    if(theArray)
+    {
+        var l=theArray.length;
+        if(property)
+        {
+            while(l--)
+            {
+                if(theArray[l][property]===value)
+                {
+                    return l;
+                }
+            }
+        }
+    }
+}
+
+function isDefined(thing)
+{
+    return thing!=null && thing!=undefined;
+}
 
 
 
+function addWeek(a)
+{
+            dWeek=a.weeks[i.iWeek-1];//.days[0].tasks;
+            dWeek.noWeek=weekNumberYear(new Date());
+            var ld=dWeek.days.length;
+            while(ld--)
+            {
+                var lt=dWeek.days[ld].tasks.length;
+                while(lt)
+                {
+                    dWeek[ld].tasks[lt].totalTomatl=0;
+                    dWeek[ld].tasks[lt].noTomatl=0;
+                }
+            }
+            a.weeks.push({dWeek});
+}
 
 
-function updateStatusT(i){
-    var w=i.w;
+function updateStatusT(){
 
     creaArchivo(w,"bak.js")
-    var indiceWeek=-1;
-        var noCurrentWeek=weekYear(new Date());  
 
-        for(var r=0;r<w.length;r++)
+    var a=what.what[cActivity].weeks;
+    var i=findIndicesTask(cActivity);
+    var theTask;
+    var w;
+
+    if(isDefined(i.iWeek))
+    {
+        w=a.weeks[i.iWeek];
+        if(isDefined(i.iday[i.iday]))
         {
-                if( w[r].w==noCurrentWeek)
-                {
-                        indiceWeek=index;
-                        break;
-                }                
+            theTask=w.days[i.iday].tasks[i.i];
+            theTask
         }
+    }
+    else
+    {
+        addWeek(a);        
+    }
 
 
+    // var week=findWeek(cActivity);
 
-        var itemCurrentWeek
-        if(indiceWeek>-1)
-        {
-            itemCurrentWeek=w[indiceWeek].history;
-        }
-        else
-        {
-            var cActivity=iActivity(w);
-            if(cActivity)
-            {var last={"w":noCurrentWeek,"t":ct,"hp":cActivity.hp,"history":{"l":"w","tt":0,"ts":cts,"t":0,"p":cActivity.history.p,"te":cte}};
-                        itemCurrentWeek=last.history;
-                        w.push(itemCurrentWeek);}
-        }
+
+    //     var itemCurrentWeek
+    //     if(indiceWeek>-1)
+    //     {
+    //         itemCurrentWeek=w[indiceWeek].history;
+    //     }
+    //     else
+    //     {
+    //         var cActivity=iActivity(w);
+    //         if(cActivity)
+    //         {var last={"w":noCurrentWeek,"t":cActivity,"hp":cActivity.hp,"history":{"l":"w","tt":0,"ts":cts,"t":0,"p":cActivity.history.p,"te":cTask}};
+    //                     itemCurrentWeek=last.history;
+    //                     w.push(itemCurrentWeek);}
+    //     }
 
         itemCurrentWeek.h=itemCurrentWeek.h++;
         itemCurrentWeek.ht=itemCurrentWeek.h++;
 
         creaArchivo(w,"what.js");
 
-        
+}
 
+function iTomatls()
+{
+    
 }
 
 function iActivity(w)
 {
-    if(ct && cte)
+    if(cActivity && cTask)
     {
         var l=w.length;
         while(l--)
         {
-            if(w[l].tg==ct)
+            if(w[l].tg==cActivity)
             {
                 return w[l];
             }
@@ -151,7 +222,7 @@ function creaArchivo(objetom,nameFile)
 
 
 
-function weekYear( d ) { 
+function weekNumberYear( d ) { 
  
   var target  = new Date(d.valueOf());  
   
@@ -375,11 +446,7 @@ function doIt()
 
                 break;
             case "1":
-                    daCounter++;
-                    timeTomatl=now();//Iniciar
-                    startInterval(1500000);
-                    isTomatl=true;
-            break;
+                    run1();
             case "0":
                     apagarTomatl();
                     updateStatusT(what.what);
@@ -405,8 +472,17 @@ function doIt()
         var l=w.length;
         while(l--)
         {
-
+            var r=w[l];
+            if(r.h.te.toLowerCase()==answer.toLowerCase())
+            {
+                cActivity=r.t;
+                cTask=r.h.te;
+                daCounter=0;
+                run1();
+                break;
+            }
         }
+
       }
       break;
 
@@ -416,6 +492,14 @@ function doIt()
 }
 
 
+function run1()
+{
+    daCounter++;
+                    timeTomatl=now();//Iniciar
+                    startInterval(1500000);
+                    isTomatl=true;
+            break;
+}
 
 
 function isDoingSomething(thing,Activity)
