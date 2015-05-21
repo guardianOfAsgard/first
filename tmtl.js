@@ -116,6 +116,7 @@ function isDefined(thing)
 
 function addWeek(a)
 {
+    //ciclo actividades
     dWeek=a.weeks[i.iWeek-1];//.days[0].tasks;
     dWeek.noWeek=weekNumberYear(new Date());
     var ld=dWeek.days.length;
@@ -506,17 +507,17 @@ function doIt() {
                 break
             default:
                 if (answer) {
-                    var today = new Date();
-                    var nw = weekNumberYear(today);
+                   
                     var activities = what.what;
                     var st = runSpecificTask(activities);
+                    // console.log(JSON.stringify(st,null,4));
 
-                    if (!st.withoutWeeks) {
+                    if (st.withoutWeeks) {
                         addWeek(activities);
                         st = runSpecificTask(activities)
                     }
 
-                    if (st.taskFound) {
+                    if (!st.taskFound) {
                         console.log(".")
                     }
                 }
@@ -532,6 +533,8 @@ function doIt() {
 
     function runSpecificTask(activities)
     {
+         var today = new Date();
+        var nw = weekNumberYear(today);
         var withoutWeeks=1;
         var bueno=0;
         var la = activities.length;
