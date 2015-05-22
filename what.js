@@ -9,8 +9,8 @@ exports.what=
 ,{"activity": "sp","weeks":[{"noWeek": 0,"higherPriority": 2,"days": [{"day": "","tasks": [{"name": "log","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
 																							 ,{"name": "readSwift","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
 																							 ]}]}]}
-,{"activity": "lec","weeks":[{"noWeek": 0,"higherPriority": 2,"days": [{"day": "","tasks": [{"name": "angular","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
-																							,{"name": "test","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
+,{"activity": "lec","weeks":[{"noWeek": 0,"higherPriority": 2,"days": [{"day": "","tasks": [{"name": "an","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
+																							,{"name": "tst","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
 																							,{"name": "css","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
 																							,{"name": "db","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}
 																							]}]}]}
@@ -19,6 +19,8 @@ exports.what=
 ]}]}]}
 ,{"activity": "blue","weeks":[{"noWeek": 0,"higherPriority": 4,"days": [{"day": "","tasks": [{"name": "documento","noTomatlWeek": 5,"totalTomatl": 0,"noTomatl": 1,"priority": 1}]}]}]}
 ];
+
+
 
 
 

@@ -31,30 +31,39 @@ var iday
 
 
 
-function findIdices(activity)
+function findIdices(activity,noWeek,date,task)
 {
-    var a=what.what[cActivity].weeks;
+    var iActivity=indexByProperty(what.what,"activity",activity);
+    if(isDefined(iActivity))
+   {
+    var a=what.what[iActivity];
+    var w=a.weeks;
     var today=new Date();
-    var noWeekYear=weekNumberYear(today);
-    var weFoundIt;
-    var iday;
-    var iTask;
-    var iWeek=indexByProperty(a,"noWeek",noWeekYear);
-    var theTask;
-    if(indexWeek)
-    {
-        iday=indexByProperty(a[iWeek].days,"day",today.toLocaleDateString());
-        if(iday)
-        {
-            iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",cTask);
-            weFoundIt=true;
-                
-        }    
-    }
+       var weFoundIt;
+       var iday;
+       var iTask;
+       var iWeek=indexByProperty(w,"noWeek",noWeek);
+       var theTask;
+       if(isDefined(iWeek))
+       {
+           iday=indexByProperty(a[iWeek].days,"day",date/*today.toLocaleDateString()*/);
+           if(isDefined(iday))
+           {
+               iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",task/*cTask*/);
+               if(isDefined(iTask))
+                    weFoundIt=true;
+                   
+           }    
+       }}
     return {weFoundIt:weFoundIt,iWeek:iWeek,iday:iday,iTask:iTask};
 }
 
-
+function findCurrentIndices()
+{
+    var today=new Date();
+    var noWeekYear=weekNumberYear(today);
+    return findIdices(cActivity,noWeekYear,today.toLocaleDateString(),cTask);
+}
 
 
 
@@ -63,24 +72,7 @@ function findIdices(activity)
 function findIndicesTask(activity)
 {
     var a=what.what[cActivity].weeks;
-    // var today=new Date();
-    // var noWeekYear=weekNumberYear(today);
-    // var weFoundIt;
-    // var iday;
-    // var iTask;
-    // var iWeek=indexByProperty(a,"noWeek",noWeekYear);
-    // var theTask;
-    // if(indexWeek)
-    // {
-    //     iday=indexByProperty(a[iWeek].days,"day",today.toLocaleDateString());
-    //     if(iday)
-    //     {
-    //         iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",cTask);
-    //         weFoundIt=true;
-    //         return a[iWeek].days[iday].tasks[lTask];
-    //     }    
-    // }
-    var i=findIdices(activity)
+    var i=findCurrentIndices();
     if(i && isDefined(i.iWeek) && isDefined(i.iday))
     {
         return a[i.iWeek].days[i.iday].tasks[i.iTask];
@@ -114,21 +106,36 @@ function isDefined(thing)
 
 
 
-function addWeek(a)
+function addWeek(a,taskFiresaggregation)
 {
+
     //ciclo actividades
-    dWeek=a.weeks[i.iWeek-1];//.days[0].tasks;
+    var la=a.length-1;
+    var lw=a[la].weeks.length-1;
+
+    //loking for the specific task
+    var today=new Date();
+    var i=findIdices(a[la].activity,weekNumberYear(today),today,taskFiresaggregation);
+    if(!i.weFoundIt) return;
+
+
+
+
+
+    dWeek=a[la].weeks[lw];//.days[0].tasks;
     dWeek.noWeek=weekNumberYear(new Date());
     var ld=dWeek.days.length;
     var today=new Date();
+
     while(ld--)
     {
-        dWeek.days[ld].day=neeDayWeek(today,ld);
-        var lt=dWeek.days[ld].tasks.length;
-        while(lt)
+        dWeek.days[ld].day=newDayWeek(today,ld);
+        var day=dWeek.days[ld];
+        var lt=day.tasks.length;
+        while(lt--)
         {
-            dWeek[ld].tasks[lt].totalTomatl=0;
-            dWeek[ld].tasks[lt].noTomatl=0;
+            day.tasks[lt].totalTomatl=0;
+            day.tasks[lt].noTomatl=0;
         }
     }
     a.weeks.push(dWeek);
@@ -136,26 +143,26 @@ function addWeek(a)
 
 function newDayWeek(f,days)
 {
-    var result = new Date(date);
+    var result = new Date(f);
     result.setDate(result.getDate() + days);
     return result.toLocaleDateString();
 }
 
 
-function updateStatusT() {
+function updateStatusT(activities) {
 
-    creaArchivo(w, "bak.js")
+    creaArchivo(activities, "bak.js")
     var a = what.what[cActivity].weeks;
                           
-    var theTask = findIndicesTask(cActivity);
-    if (!theTask)
-    {
-        addWeek(a);
-        theTask = findIndicesTask(cActivity);
-    }
+    // var theTask = findIndicesTask(cActivity);
+    // if (!theTask)
+    // {
+    //     addWeek(a);
+    //     theTask = findIndicesTask(cActivity);
+    // }
     theTask.noTomatl++;
 
-    creaArchivo(w, "what.js");
+    creaArchivo(activities, "what.js"); 
 }
 
 function iTomatls()
@@ -338,7 +345,7 @@ function horas(msec)
 
 function infoTomatl()
 {
-    var i=findIdices(cActivity)
+    var i=findCurrentIndices();
     var theTask;
     var theWeek;
     var theDay;
@@ -366,10 +373,23 @@ function infoTomatl()
 var interval;
 var ultimaPausa=0;
 var intervaloMensaje;
+ var util = require('util');
+var exec = require('child_process').exec;
+
+function clear(){
+    exec('clear', function(error, stdout, stderr){
+        util.puts(stdout);
+    });    
+}
+
 doIt();
 
 function doIt() {
     rl.question("", function (answer) {
+ // console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+var timeToClean=500;
+
+
 
         switch (answer) {
             case "c":
@@ -444,6 +464,7 @@ function doIt() {
                 console.log(whatIsDoing);
                 console.log(infoTomatl());
                 console.log("------------------------------------------------")
+                goClean=0;
 
                 break;
             case "i":
@@ -480,6 +501,7 @@ function doIt() {
                 console.log(cadenaTomatl ? cadenaTomatl + ' -  n: ' + daCounter : "");
                 // console.log(whatIsDoing);
                 // console.log("------------------------------------------------")
+                timeToClean=700;
 
                 break;
             case "di":
@@ -525,6 +547,9 @@ function doIt() {
                 break;
 
         }
+        if(timeToClean)
+            setTimeout(function() {clear();}, timeToClean);
+
         doIt();
 
     });
