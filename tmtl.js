@@ -34,6 +34,18 @@ var iday
 function findIdices(activity,noWeek,date,task)
 {
     var iActivity=indexByProperty(what.what,"activity",activity);
+
+    // console.log('a - '+activity);
+    // console.log('w - '+noWeek);
+    // console.log('d - '+date);
+    // console.log('t - '+activity);
+    var t=   '\na - '+activity
+    +'\nw - '+noWeek
+    +'\nd - '+date
+    +'\nt - '+activity;
+
+creaArchivo('some',t);
+    
     if(isDefined(iActivity))
    {
     var a=what.what[iActivity];
@@ -62,11 +74,14 @@ function findCurrentIndices()
 {
     var today=new Date();
     var noWeekYear=weekNumberYear(today);
-    return findIdices(cActivity,noWeekYear,today.toLocaleDateString(),cTask);
+    return findIdices(cActivity,noWeekYear,dateWithFormat(today),cTask);
 }
 
 
-
+function dateWithFormat(rightNow)
+{
+    return rightNow.toISOString().slice(0,10).replace(/-/g,"-");
+}
 
 
 function findIndicesTask(activity)
@@ -112,13 +127,20 @@ function addWeek(a,taskFiresaggregation)
     //ciclo actividades
     var la=a.length-1;
     var lw=a[la].weeks.length-1;
-
+    var found=0;
+    while(la--)
+    {
     //loking for the specific task
-    var today=new Date();
-    var i=findIdices(a[la].activity,weekNumberYear(today),today,taskFiresaggregation);
-    if(!i.weFoundIt) return;
-
-
+        var today=new Date();
+        var i=findIdices(a[la].activity,weekNumberYear(today),dateWithFormat(today),taskFiresaggregation);
+        
+        if(i.weFoundIt) {
+            found=1;
+            break;
+        }
+    }
+    if(!found) return;
+    console.log('affff');
 
 
 
@@ -145,7 +167,7 @@ function newDayWeek(f,days)
 {
     var result = new Date(f);
     result.setDate(result.getDate() + days);
-    return result.toLocaleDateString();
+    return dateWithFormat(result);
 }
 
 
@@ -194,15 +216,23 @@ function iActivity(w)
 
 
 
-function creaArchivo(t,nameFile)
+function creaArchivo(nameFile,txt)
 {
-    fs.writeFile( t , JSON.stringify(objeto,null,3), function(err) {
-        if(err) {
-            console.log("fk"+err);
-        } else {
-            // console.log("The file was saved!");
-        }
-    }); 
+    // fs.writeFile( t , JSON.stringify(objeto,null,3), function(err) {
+    //     if(err) {
+    //         console.log("fk"+err);
+    //     } else {
+    //         // console.log("The file was saved!");
+    //     }
+    // }); 
+var fs = require('fs');
+    fs.writeFile(nameFile, txt, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    //console.log("The file was saved!");
+}); 
 
 }
 
@@ -377,9 +407,10 @@ var intervaloMensaje;
 var exec = require('child_process').exec;
 
 function clear(){
-    exec('clear', function(error, stdout, stderr){
-        util.puts(stdout);
-    });    
+    // exec("console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n') clear ", function(error, stdout, stderr){
+    //     util.puts(stdout);
+    // });    
+  console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
 }
 
 doIt();
@@ -535,7 +566,7 @@ var timeToClean=500;
                     // console.log(JSON.stringify(st,null,4));
 
                     if (st.withoutWeeks) {
-                        addWeek(activities);
+                        addWeek(activities,answer);
                         st = runSpecificTask(activities)
                     }
 
@@ -566,16 +597,16 @@ var timeToClean=500;
         while (la--) {
             var a=activities[la];
             var lw = a.weeks.length;
-            var day = today.toLocaleDateString();
+            var day = dateWithFormat(today);
             
             while (lw--) {
                 var w = a.weeks[lw];
-
+               // console.log(w.noWeek+' - '+nw);
                 if (w.noWeek == nw) {
                     withoutWeeks=0;
                     var ld = w.days.length;
                     while (ld--) {
-                        console.log(nw);
+                       // console.log(nw);
 
                         var d = w.days[ld];
                         if (d.day==day) {
@@ -588,7 +619,7 @@ var timeToClean=500;
                                     cActivity=a.activity;
                                     cTask=answer;
                                     bueno=1;
-                                    console.log(JSON.stringify(a,null,4));
+                                //   console.log(JSON.stringify(a,null,4));
                                 }
                             }
                         }
