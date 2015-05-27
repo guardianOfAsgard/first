@@ -35,26 +35,18 @@ function findIdices(activity,noWeek,date,task)
 {
     var iActivity=indexByProperty(what.what,"activity",activity);
 
-    // console.log('a - '+activity);
-    // console.log('w - '+noWeek);
-    // console.log('d - '+date);
-    // console.log('t - '+activity);
-    var t=   '\na - '+activity
-    +'\nw - '+noWeek
-    +'\nd - '+date
-    +'\nt - '+activity;
-
-// createInterfaceArchivo('some',t);
+    var iday;
+    var iTask;
+    var iWeek;
+    var weFoundIt;
     
     if(isDefined(iActivity))
    {
     var a=what.what[iActivity];
     var w=a.weeks;
     var today=new Date();
-       var weFoundIt;
-       var iday;
-       var iTask;
-       var iWeek=indexByProperty(w,"noWeek",noWeek);
+
+       iWeek=indexByProperty(w,"noWeek",noWeek);
        var theTask;
        if(isDefined(iWeek))
        {
@@ -87,16 +79,32 @@ function dateWithFormat(rightNow)
 }
 
 
-function findIndicesTask(activity)
+function findIndicesTask(task)
 {
-    var a=what.what[cActivity].weeks;
-    var i=findCurrentIndices();
-    if(i && isDefined(i.iWeek) && isDefined(i.iday))
+
+    var activities=what.what;
+    var la=activities.length-1;
+    var noWeek=weekNumberYear(today);
+    var today=dateWithFormat(new Date());
+    var found=0;
+    var i;
+    while(la--)
     {
-        return a[i.iWeek].days[i.iday].tasks[i.iTask];
+       var a=activities[la];
+        var d=w.days[ld];
+        var noWeek=w.noWeek;
+        var i=findIdices(a[la].activity,noWeek,today,task);
+        
+        if(i.weFoundIt) {
+            found=1;
+            break;
+        }
     }
 
-    //return {weFoundIt:weFoundIt,iWeek:iWeek,iday:iday,iTask:iTask};
+    return {
+        task:i.found? activities[i.iActivity].weeks[i.iWeek].days[i.iday].tasks[i.itask]:null,
+        hasWeeks:isDefined(i.iWeek)
+    };
 }
 
 function indexByProperty(theArray,property,value)
@@ -275,7 +283,7 @@ var fs = require('fs');
 
 function weekNumberYear( d ) { 
      
-    var target  = new Date(d.valueOf());  
+   var target  = new Date(d.valueOf());  
       
     var dayNr   = (d.getDay() + 6) % 7;  
      
@@ -567,12 +575,12 @@ var timeToClean=500;
                 if (answer) {
                    
                     var activities = what.what;
-                    var st = runSpecificTask(activities);
+                    var st = runSpecificTask(answer);
                     // console.log(JSON.stringify(st,null,4));
 
-                    if (st.withoutWeeks) {
+                    if (!st.hasWeeks) {
                         addWeek(activities,answer);
-                        st = runSpecificTask(activities)
+                        st = runSpecificTask(answer)
                     }
 
                     if (!st.taskFound) {
@@ -592,49 +600,68 @@ var timeToClean=500;
 }
     
 
-    function runSpecificTask(activities)
+    function runSpecificTask(task)
     {
-         var today = new Date();
-        var nw = weekNumberYear(today);
-        var withoutWeeks=1;
-        var bueno=0;
-        var la = activities.length;
+        console.log(JSON.stringify(task,null,4));
+        var taskFound=0;
+        var leTask=findIndicesTask(task.toLowerCase());
+        var hasWeeks=leTask.hasWeeks;
+
+        if(leTask.task && leTask.hasWeeks)
+        {
+            cActivity=a.activity;
+            cTask=task;
+            taskFound=1;
+        }
+        return {hasWeeks:hasWeeks,taskFound:taskFound};
+
+
+
+        // if(leTask.weekExist)
+        // {
+             
+        // }
+        // return {taskFound:taskFound,
+
+        //         }
+
+
 
         //sae code find indieces
-        while (la--) {
-            var a=activities[la];
-            var lw = a.weeks.length;
-            var day = dateWithFormat(today);
+        // while (la--) {
+        //     var a=activities[la];
+        //     var lw = a.weeks.length;
+        //     var day = dateWithFormat(today);
             
-            while (lw--) {
-                var w = a.weeks[lw];
-               // console.log(w.noWeek+' - '+nw);
-                if (w.noWeek == nw) {
-                    withoutWeeks=0;
-                    var ld = w.days.length;
-                    while (ld--) {
-                       // console.log(nw);
+        //     while (lw--) {
+        //         var w = a.weeks[lw];
+        //        // console.log(w.noWeek+' - '+nw);
+        //         if (w.noWeek == nw) {
+        //             withoutWeeks=0;
+        //             var ld = w.days.length;
+        //             while (ld--) {
+        //                // console.log(nw);
 
-                        var d = w.days[ld];
-                        if (d.day==day) {
-                            var lt=d.tasks.length;
+        //                 var d = w.days[ld];
+        //                 if (d.day==day) {
+        //                     var lt=d.tasks.length;
 
-                            while(lt--){
-                                var t=d.tasks[lt];
-                                if(t.tasks.toLowerCase()==answer.toLowerCase()) 
-                                {
-                                    cActivity=a.activity;
-                                    cTask=answer;
-                                    bueno=1;
-                                //   console.log(JSON.stringify(a,null,4));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return {withoutWeeks:withoutWeeks,taskFound:bueno};
-        }
+        //                     while(lt--){
+        //                         var t=d.tasks[lt];
+        //                         if(t.tasks.toLowerCase()==answer.toLowerCase()) 
+        //                         {
+        //                             cActivity=a.activity;
+        //                             cTask=answer;
+        //                             bueno=1;
+        //                         //   console.log(JSON.stringify(a,null,4));
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return {withoutWeeks:withoutWeeks,taskFound:bueno};
+        // }
 }
         function run1()
         {
