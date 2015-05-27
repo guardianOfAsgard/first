@@ -44,7 +44,7 @@ function findIdices(activity,noWeek,date,task)
     +'\nd - '+date
     +'\nt - '+activity;
 
-creaArchivo('some',t);
+// createInterfaceArchivo('some',t);
     
     if(isDefined(iActivity))
    {
@@ -58,12 +58,15 @@ creaArchivo('some',t);
        var theTask;
        if(isDefined(iWeek))
        {
-           iday=indexByProperty(a[iWeek].days,"day",date/*today.toLocaleDateString()*/);
+        var d=w[iWeek].days;
+           iday=indexByProperty(w[iWeek].days,"day",date/*today.toLocaleDateString()*/);
            if(isDefined(iday))
            {
-               iTask=indexByProperty(a[iWeek].days[iday].tasks,"task",task/*cTask*/);
+               iTask=indexByProperty(d[iday].tasks,"task",task/*cTask*/);
                if(isDefined(iTask))
-                    weFoundIt=true;
+                    {weFoundIt=true;
+
+                    }
                    
            }    
        }}
@@ -124,15 +127,21 @@ function isDefined(thing)
 function addWeek(a,taskFiresaggregation)
 {
 
-    //ciclo actividades
+    //activity iteration
     var la=a.length-1;
-    var lw=a[la].weeks.length-1;
     var found=0;
+    var i;
+    var w;
+    var ld;
     while(la--)
     {
-    //loking for the specific task
-        var today=new Date();
-        var i=findIdices(a[la].activity,weekNumberYear(today),dateWithFormat(today),taskFiresaggregation);
+        var lw=a[la].weeks.length-1;
+        //loking for the specific task
+        w=a[la].weeks[lw];
+        ld=a[la].weeks[lw].days.length-1;
+        var d=w.days[ld];
+        var noWeek=w.noWeek;
+        var i=findIdices(a[la].activity,noWeek,d.day,taskFiresaggregation);
         
         if(i.weFoundIt) {
             found=1;
@@ -140,15 +149,11 @@ function addWeek(a,taskFiresaggregation)
         }
     }
     if(!found) return;
-    console.log('affff');
 
-
-
-    dWeek=a[la].weeks[lw];//.days[0].tasks;
+    var dWeek=w;
     dWeek.noWeek=weekNumberYear(new Date());
-    var ld=dWeek.days.length;
     var today=new Date();
-
+    ld=w.days.length;
     while(ld--)
     {
         dWeek.days[ld].day=newDayWeek(today,ld);
@@ -160,7 +165,7 @@ function addWeek(a,taskFiresaggregation)
             day.tasks[lt].noTomatl=0;
         }
     }
-    a.weeks.push(dWeek);
+    a[la].weeks.push(dWeek);
 }
 
 function newDayWeek(f,days)
@@ -594,6 +599,8 @@ var timeToClean=500;
         var withoutWeeks=1;
         var bueno=0;
         var la = activities.length;
+
+        //sae code find indieces
         while (la--) {
             var a=activities[la];
             var lw = a.weeks.length;
