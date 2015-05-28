@@ -126,7 +126,7 @@ exports.what=[
                                 "task": "an",
                                 "noTomatlWeek": 5,
                                 "totalTomatl": 0,
-                                "noTomatl": 2,
+                                "noTomatl": 1,
                                 "priority": 1
                             },
                             {
