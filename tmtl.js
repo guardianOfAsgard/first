@@ -155,17 +155,26 @@ function addWeek(a,taskFiresaggregation)
     dWeek.noWeek=weekNumberYear(new Date());
     var today=new Date();
     ld=w.days.length;
+    var newDays=[];
     while(ld--)
     {
-        dWeek.days[ld].day=newDayWeek(today,ld);
-        var day=dWeek.days[ld];
+
+        var day=cloneObject(dWeek.days[ld]);
+        day.day=newDayWeek(today,ld);
         var lt=day.tasks.length;
+        var newTasks=[];
         while(lt--)
         {
-            day.tasks[lt].totalTomatl=0;
-            day.tasks[lt].noTomatl=0;
+            var task=cloneObject(day.tasks[lt]);
+
+            task.totalTomatl=0;
+            task.noTomatl=0;
+            newTasks.push(task);
         }
+        day.tasks=newTasks;
+        newDays.push(day);
     }
+    dWeek.days=newDays;
     writeActivities( "bak.js",a);
     a[la].weeks.push(dWeek);
     writeActivities('what.js',a);
@@ -316,7 +325,7 @@ function infoTomatl()
 
 
 
-//1 500000
+//1 150000000
 var interval;
 var ultimaPausa=0;
 var intervaloMensaje;
@@ -596,7 +605,7 @@ var timeToClean=500;
             {
                 //console
                 var sfx = require("sfx");
-                runTomatl(function(){ sfx.random();},tiempo,true);
+                runTomatl(function(){ sfx.random(); console.log("sonido")},tiempo);
             }
             catch(e)
             {
@@ -612,37 +621,33 @@ var timeToClean=500;
               },tiempo,false);
                 */
             
-                runTomatl(function(){var exec = require('child_process').exec;   exec('C:\\Rios\\b.exe');},tiempo,true);
+                runTomatl(function(){var exec = require('child_process').exec;   exec('C:\\Rios\\b.exe');},tiempo);
             }
        
         }
 
-        function runTomatl (f,tiempo,ejecutarIntervalo) {
-            interval=setInterval(function(){
-                if(ejecutarIntervalo)
-                {
-                    /*                        f();
-                                            console.log(tiempo);*/
-                    intervaloMensaje=setInterval(f, 3000); 
-                    //console.log (JSON.stringify(intervaloMensaje,null,4));
-                }
-                else
-                    f();
-                isTomatl=false;
-                // apagarTomatl();
-
+        function runTomatl (f,tiempo) {
+            interval=setTimeout(
+                        function(){
+                        intervaloMensaje=setInterval(f, 3000);
             }, tiempo);
         }
 
         function apagarTomatl()
         {
+
+            console.log(interval);
+
             clearInterval(interval);
             interval=null;
+                        console.log(interval);
+
             timeTomatl=0;
             // console.log("finished");
             clearInterval(intervaloMensaje);
             intervaloMensaje=null;
             isTomatl=false;
+            console.log("apagado");
         }
 
         function now()
@@ -685,3 +690,5 @@ function cloneObject(obj) {
     }
     return copy;
 }
+
+
