@@ -93,7 +93,7 @@ function doIt() {
                 console.log(infoTomatl());
                 break;
             case "1":
-                run1();
+                mt.run1();
             case "0":
                 wm.updateStatusT(what.what);
                 mt.apagarTomatl();
@@ -121,7 +121,11 @@ function doIt() {
                 timeToClean = 0;
                 break;
             case "ev":
-               
+               var we = printer.WeekEvolucion({});
+                we.forEach(function(e) {
+                    if (e.a) console.log(e.p + "- a: " + e.a);
+                    if (e.t) console.log("      " + e.p + "- t: " + e.t+" -tml:"+e.tml+"  -tpw:"+e.tpw+"  -tpd:"+e.tpd);
+                });
                 timeToClean = 0;
                 break;
             default:
@@ -511,41 +515,44 @@ function files() {
 //gruop the logic to print all the messages
 function thePrinter() {
 
-    this.printEvolucion=function(d){
-        // data
-        var h=new Date();
-        var activity=d.activity?d.activity:cActivity;
-        var task=d.task?d.task:cTask;
-        var month=d.month?d.month:h.getMonth();
-        var week=d.week?d.week:cActivity;
+   this.WeekEvolucion = function(d) {
+    // data
+    var h = new Date();
+    var month = d.month ? d.month : h.getMonth();
+    var week = d.week?d.week:wm.numberOfTheWeek(h);
+    var a=what.what;
 
-        // weeks
-         var plainActivities = activitiesByPriority();
-         var weeksM=weeksOfMonth(month);
-         var aDatesWeeks=[];
+    // weeks
+    var plainActivities = this.activitiesByPriority();
+    var weeksM = weeksOfMonth(month);
+    var aDatesWeeks = [];
 
-         weeksM.forEach(function(week){
-            var fDate=new Date(h.getFullYear(),month,1);
-            if(week)
-                aDatesWeeks.concat( datesOfWeek(fDate,week));
-         });
+    plainActivities.forEach  (function(aT) {
+        act=aT.a?aT.a:act;
+        var fDate = new Date(h.getFullYear(), month, 1); 
+        if (week) {
+            aDatesWeeks.concat(datesOfWeek(fDate, week));
+        }
+        if (aT.t) {
+            aDatesWeeks.forEach(function(dateWeek) {
+                var i=indices.findIdices(act, week, dateWeek, aT.t);
+                if(i.weFoundIt){
+                    var taskF=a[i.iActivity].weeks[i.iWeek].days[i.iDay].tasks[i.iTask];
 
+                    var tpw=aT.tpw?aT.tpw:0;
+                    var tpd=aT.tpd?aT.tpd:0;
+                    var tml=aT.tml?aT.tml:0;
 
+                    tpw+=taskF.tPerWeek;
+                    tpd+=taskF.tPerDay;
+                    tml+=taskF.tomatls;
+                }
+            });
 
-
-//semana,month
-                plainActivities.forEach / (function(e) {
-                    if (e.a) console.log(e.p + "- a: " + e.a);
-                    if (e.t) {
-                        var leTask = indices.findIndicesTask(e.t);
-                        if (leTask.task) {
-                            var t = leTask.task;
-                            t.tomatls++;
-                            console.log("      " + e.p + "- t: " + e.t + " tPerWeek: " + t.tPerWeek + " tPerDay: " + t.tPerDay + " t: " + t.tomatls);
-                        }
-                    }
-                });
-    }
+        }
+    });
+    return plainActivities;
+}
 
 
 
@@ -673,7 +680,7 @@ function thePrinter() {
                 firstWeek = new Date(y, month, 1);
                 break;
         }
-        var nWeek = numberOfTheWeek(firstWeek);
+        var nWeek = wm.numberOfTheWeek(firstWeek);
         return [nWeek, nWeek + 1, nWeek + 2, nWeek + 3];
     }
 
