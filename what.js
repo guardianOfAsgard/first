@@ -70,6 +70,31 @@ exports.what=[
                         ]
                     }
                 ]
+            },
+            {
+                "noWeek": 24,
+                "higherPriority": 2,
+                "days": [
+                    {
+                        "day": "2015-06-08",
+                        "tasks": [
+                            {
+                                "task": "readSwift",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "log",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     },
@@ -127,6 +152,162 @@ exports.what=[
                                 "noTomatlWeek": 5,
                                 "totalTomatl": 0,
                                 "noTomatl": 3,
+                                "priority": 1
+                            },
+                            {
+                                "task": "tst",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "css",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "db",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "noWeek": 23,
+                "higherPriority": 2,
+                "days": [
+                    {
+                        "day": "2015-06-02",
+                        "tasks": [
+                            {
+                                "task": "db",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "css",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "tst",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "an",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 3,
+                                "priority": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "noWeek": 23,
+                "higherPriority": 2,
+                "days": [
+                    {
+                        "day": "2015-06-03",
+                        "tasks": [
+                            {
+                                "task": "an",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 6,
+                                "priority": 1
+                            },
+                            {
+                                "task": "tst",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "css",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "db",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "noWeek": 23,
+                "higherPriority": 2,
+                "days": [
+                    {
+                        "day": "2015-06-04",
+                        "tasks": [
+                            {
+                                "task": "db",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "css",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "tst",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
+                                "priority": 1
+                            },
+                            {
+                                "task": "an",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 4,
+                                "priority": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "noWeek": 24,
+                "higherPriority": 2,
+                "days": [
+                    {
+                        "day": "2015-06-08",
+                        "tasks": [
+                            {
+                                "task": "an",
+                                "noTomatlWeek": 5,
+                                "totalTomatl": 0,
+                                "noTomatl": 0,
                                 "priority": 1
                             },
                             {
