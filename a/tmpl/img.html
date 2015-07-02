@@ -1,0 +1,22 @@
+<input type="button" value="s" ng-click="saveIt">
+
+<div id="si" style="border-style: groove; border-color: aquamarine;">
+
+</div>
+
+<div id="no" style="border-style: groove; border-color: lightgrey;">
+
+
+
+
+<div ng-repeat="i in imgs" class="row form-group" style="display: inline-block; margin-left: 15px; margin-right: 15px;" id="{{i.id}}">	
+	
+	<div style="display: inline-block; ">
+  		<input type="checkbox" class="form-control"  chingadera={{i.id}} ng-model='
+  		imgsChk[i.id]' style="width:25px" ng-click="checkClick(i.id)">
+
+  		<!-- <img src="{{i.c}}"  width="252" height="177" class="img-rounded"> -->
+    </div>
+</div>
+
+</div>

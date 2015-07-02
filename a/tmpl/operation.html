@@ -1,0 +1,72 @@
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header navbar-menu-header-app">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-8">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#/"> Operaciones </a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-8">
+        <ul class="nav navbar-nav menu-estado" ng-click="menuclick($event)">
+            <li ng-hide="disable"><a href="">Guardar</a> </li>
+            <li ng-hide="disable"><a href="">Cancelar </a></li>
+            <li ng-hide="!disable"><a href="#/new/">Nuevo</a> </li>
+            <li ng-hide="!disable"><a href="">Editar</a> </li>
+            <li ng-hide="!disable"><a href="">Borrar</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+<form class="form-horizontal" role="form">
+  
+  
+  <input type="hidden" id="id" ng-model="id">
+
+  
+    <div class="form-group">
+        <label for="categoria" class="col-sm-2 control-label">Categoria</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="categoria" ng-model="categoria" ng-disabled="disable">
+        </div>
+    </div>
+  
+  
+  <div class="form-group">
+    <label for="subCategoria" class="col-sm-2 control-label">SubCategoria</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="subCategoria" ng-model="subCategoria" ng-disabled="disable" >
+        </div>
+ </div>
+            
+    
+ <div class="form-group">
+     <label for="total" class="col-sm-2 control-label">Total</label>
+     <div class="col-sm-10">
+         <input type="text" class="form-control" id="total" ng-model="total" ng-disabled="disable">
+     </div>
+ </div>
+
+  
+   <div class="form-group">
+    <label for="ubicacion" class="col-sm-2 control-label">Ubicacion</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="ubicacion" ng-model="ubicacion" ng-disabled="disable" >
+        </div>
+ </div>
+            
+    
+
+  
+  
+ <!-- imagen referencias -->
+
+</form>
+
